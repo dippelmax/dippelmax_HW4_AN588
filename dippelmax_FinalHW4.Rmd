@@ -40,15 +40,15 @@ p <- pnorm((p1 - p0)/sqrt(pi * (1 - p0)/n))
 ```
 
 ```{r}
-# function of just a one tailed t-test
-
-
+# Simple function for one tailed test
 Z.prop.test <- function(p1, p0, n) {
     pnorm((p1 - p0)/sqrt(pi * (1 - p0)/n))
 }
+```
 
 
-
+```{r}
+# one or two tailed z-test function
 
 
 Z.prop.test <- function(p1, p0, n1, p2=NULL, n2=NULL) { 
@@ -57,19 +57,26 @@ Z.prop.test <- function(p1, p0, n1, p2=NULL, n2=NULL) {
     p <- pnorm((p1 - p0)/sqrt(pi * (1 - p0)/n1))
     lower <- p1 - qnorm(0.975) * sqrt(p1 * (1 - p1)/n1)
     upper <- p1 + qnorm(0.975) * sqrt(p1 * (1 - p1)/n1)
-  return (list(p.value = as.numeric(p), z, lower, upper)) } 
+  return (list(p.value = as.numeric(p), z.value = as.numeric(z), Lower.confidence.interval = as.numeric(lower), 
+                 upper.confidence.interval = as.numeric(upper))) } 
   
   else {
     z <-  (p2 - p1)/sqrt((p2 + p1/(n1 + n2) * (1 - (p1 + p2)/(n1 + n2))) * (1/n1 + 1/n2))
     p <- pnorm((p2 - p1)/sqrt((p2 + p1/(n1 + n2) * (1 - (p1 + p2)/(n1 + n2))) * (1/n1 + 1/n2)))
     upper <- (p1 - p2) + (z * sqrt((p1*(1-p1)/n1) + (p2 * (1-p2)/n2)))
     lower <- (p1 - p2) - (z * sqrt((p1*(1-p1)/n1) + (p2 * (1-p2)/n2)))
-    return (list(p.value = as.numeric(p), z, lower, upper))
-    
+    return (list(p.value = as.numeric(p), z.value = as.numeric(z), Lower.confidence.interval = as.numeric(lower), 
+                 upper.confidence.interval = as.numeric(upper)))
   }
 }
 
-Z.prop.test(p1 = .6, p0 = .7, n1 = 30)
+
+```
+
+```{r}
+# Testing results
+
+Z.prop.test(p1 = .6, p0 = .9, n1 = 30)
 
 Z.prop.test(p1 = .9, n1 = 30, p2 = .4, n2 = 30)
 
@@ -86,9 +93,11 @@ p <- pnorm((p2 - p1)/sqrt((p2 + p1/(n1 + n2) * (1 - (p1 + p2)/(n1 + n2))) * (1/n
 upper <- (p1 - p2) + (z * sqrt((p1*(1-p1)/n1) + (p2 * (1-p2)/n2)))
 lower <- (p1 - p2) - (z * sqrt((p1*(1-p1)/n1) + (p2 * (1-p2)/n2)))
   
-Z.prop.test(p1 = .6, p0 = .7, n1 = 30)
-
 ```
+
+
+
+
 
 ```{r}
 # data I need to test two tailed z test
