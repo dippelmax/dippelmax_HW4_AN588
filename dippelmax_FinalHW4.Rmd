@@ -73,6 +73,35 @@ Z.prop.test <- function(p1, p0, n1, p2=NULL, n2=NULL) {
 
 ```
 
+
+```{r}
+# Adding more functions
+
+Z.prop.test <- function(p1, p0, n1, p2=NULL, n2=NULL) { 
+  if (is.null(p2)) {
+    z <- (p1 - p0)/sqrt(pi * (1 - p0)/n1)
+    p <- pnorm((p1 - p0)/sqrt(pi * (1 - p0)/n1))
+    lower <- p1 - qnorm(0.975) * sqrt(p1 * (1 - p1)/n1)
+    upper <- p1 + qnorm(0.975) * sqrt(p1 * (1 - p1)/n1)
+  return (list(p.value = as.numeric(p), z.value = as.numeric(z), Lower.confidence.interval = as.numeric(lower), 
+                 upper.confidence.interval = as.numeric(upper))) 
+    if (n1 * p1 > 5 || n1 (1- p1) > 5) { print("Error")}
+    } 
+  
+  else {
+    z <-  (p2 - p1)/sqrt((p2 + p1/(n1 + n2) * (1 - (p1 + p2)/(n1 + n2))) * (1/n1 + 1/n2))
+    p <- pnorm((p2 - p1)/sqrt((p2 + p1/(n1 + n2) * (1 - (p1 + p2)/(n1 + n2))) * (1/n1 + 1/n2)))
+    upper <- (p1 - p2) + (z * sqrt((p1*(1-p1)/n1) + (p2 * (1-p2)/n2)))
+    lower <- (p1 - p2) - (z * sqrt((p1*(1-p1)/n1) + (p2 * (1-p2)/n2)))
+    return (list(p.value = as.numeric(p), z.value = as.numeric(z), Lower.confidence.interval = as.numeric(lower), 
+                 upper.confidence.interval = as.numeric(upper)))
+    
+  }
+}
+
+```
+
+
 ```{r}
 # Testing results
 
@@ -138,15 +167,28 @@ ci3 <- predict(lm1, newdata = data.frame(Brain_Size_Species_Mean = d$Brain_Size_
 head(ci3)
 lines <- data.frame(ci3)
 
+ci5 <- predict(lm1, newdata = data.frame(Brain_Size_Species_Mean = d$Brain_Size_Species_Mean), interval = "prediction",
+    level = 0.90)
+head(ci5)
+lines3 <- data.frame(ci5)
+
 text <- "(Longevity)= 1.2180(Mean brain size) + 248.9523"
 
 ggplot(data = d, aes(x = Brain_Size_Species_Mean, y = MaxLongevity_m)) + geom_point(color="darkorange3") + 
-  geom_text(aes(x = 200, y = 750, label=text)) + 
+  geom_text(aes(x = 250, y = 750, label=text)) + 
   geom_line(aes(x = d$Brain_Size_Species_Mean, y = lines$fit, color = "black")) +
   geom_line(aes(x = d$Brain_Size_Species_Mean, y = lines$lwr, color = "orange")) + 
-  geom_line(aes(x = d$Brain_Size_Species_Mean, y = lines$upr, color = "purple")) + scale_fill_manual(values=c("orange", "black", "purple")) + scale_color_manual(values=c("orange", "black", "purple")) + scale_color_discrete(name = "legend", labels = c("Fit", "Lower", "Upper"))
+  geom_line(aes(x = d$Brain_Size_Species_Mean, y = lines$upr, color = "purple")) + 
+  geom_line(aes(x = d$Brain_Size_Species_Mean, y = lines3$lwr, color = "green")) + 
+  geom_line(aes(x = d$Brain_Size_Species_Mean, y = lines3$upr, color = "blue")) + 
+  scale_color_discrete(name = "legend", labels = c("Fit", "Upper Prediction Interval", "Lower Prediction Interval", "Lower Confidence Interval" , "Upper Confidence Interval"))
 
 
+
+
+```
+
+```{r}
 lm2 <- lm(log(MaxLongevity_m) ~ log(Brain_Size_Species_Mean), data = d)
 summary(lm2)
 ci2 <- confint(lm2, level = 0.90)
@@ -162,12 +204,16 @@ text <- "log(Longevity)= 1.2180*log(Mean brain size) + 248.9523"
 ggplot(data = d, aes(x = log(Brain_Size_Species_Mean), y = log(MaxLongevity_m))) + geom_point(color="darkorange") + geom_text(aes(x = 4, y = 7, label=text)) + 
   geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = log(lines2$fit)), colour = "black") +
   geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = log(lines2$lwr)), colour = "orange") + 
-  geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = log(lines2$upr)), colour = "darkorchid4") + scale_color_manual(name = "Lines", values = c("Fit" = "black", "Lower" = "orange", "Upper" = "darkorchid4"))
+  geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = log(lines2$upr)), colour = "darkorchid4") + scale_color_discrete(name = "legend", labels = c("Fit", "Lower", "Upper"))
+# Not sure why the legend does not appear on this graph like it did the last 
+
 
 ci5 <- predict(lm1, newdata = data.frame(Brain_Size_Species_Mean = 800), interval = "prediction",
     level = 0.90)
 ci6 <- predict(lm2, newdata = data.frame(Brain_Size_Species_Mean = 800), interval = "prediction",
     level = 0.90)
+
+# The log model looks like it has a better fit 
 
 ```
 
