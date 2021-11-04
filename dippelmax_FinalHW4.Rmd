@@ -183,9 +183,6 @@ ggplot(data = d, aes(x = Brain_Size_Species_Mean, y = MaxLongevity_m)) + geom_po
   geom_line(aes(x = d$Brain_Size_Species_Mean, y = lines3$upr, color = "blue")) + 
   scale_color_discrete(name = "legend", labels = c("Fit", "Upper Prediction Interval", "Lower Prediction Interval", "Lower Confidence Interval" , "Upper Confidence Interval"))
 
-
-
-
 ```
 
 ```{r}
@@ -199,18 +196,25 @@ ci4 <- predict(lm1, newdata = data.frame(Brain_Size_Species_Mean = d$Brain_Size_
 head(ci4)
 lines2 <- data.frame(ci4)
 
+ci6 <- predict(lm2, newdata = data.frame(Brain_Size_Species_Mean = d$Brain_Size_Species_Mean), interval = "prediction",
+    level = 0.90)
+head(ci6)
+lines4 <- data.frame(ci6)
 
-text <- "log(Longevity)= 1.2180*log(Mean brain size) + 248.9523"
-ggplot(data = d, aes(x = log(Brain_Size_Species_Mean), y = log(MaxLongevity_m))) + geom_point(color="darkorange") + geom_text(aes(x = 4, y = 7, label=text)) + 
-  geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = log(lines2$fit)), colour = "black") +
-  geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = log(lines2$lwr)), colour = "orange") + 
-  geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = log(lines2$upr)), colour = "darkorchid4") + scale_color_discrete(name = "legend", labels = c("Fit", "Lower", "Upper"))
+
+text2 <- "log(Longevity)= 0.20285*log(Mean brain size) + 5.08650"
+ggplot(data = d, aes(x = log(Brain_Size_Species_Mean), y = log(MaxLongevity_m))) + geom_point(color="darkorange") + geom_text(aes(x = 4, y = 7, label=text2)) + 
+geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = log(lines2$fit), color = "black")) +
+geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = log(lines2$lwr), color = "orange")) + 
+  geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = log(lines2$upr), color = "red")) +
+   geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = lines4$lwr, color = "green")) + 
+  geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = lines4$upr, color = "blue")) + scale_color_discrete(name = "legend", labels = c("Fit", "Upper Prediction Interval", "Lower Prediction Interval", "Lower Confidence Interval" , "Upper Confidence Interval"))
 # Not sure why the legend does not appear on this graph like it did the last 
 
 
-ci5 <- predict(lm1, newdata = data.frame(Brain_Size_Species_Mean = 800), interval = "prediction",
+ci7 <- predict(lm1, newdata = data.frame(Brain_Size_Species_Mean = 800), interval = "prediction",
     level = 0.90)
-ci6 <- predict(lm2, newdata = data.frame(Brain_Size_Species_Mean = 800), interval = "prediction",
+ci8 <- predict(lm2, newdata = data.frame(Brain_Size_Species_Mean = 800), interval = "prediction",
     level = 0.90)
 
 # The log model looks like it has a better fit 
