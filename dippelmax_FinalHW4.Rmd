@@ -158,21 +158,33 @@ d <- read.csv("KamilarAndCooperData.csv", header = TRUE)
 head(d)
 d <- na.omit(d)
 
+# Making a linear model
+
 lm1 <- lm(MaxLongevity_m ~ Brain_Size_Species_Mean, data = d)
 summary(lm1)
+
+# Finding confidence intervals for parameters b0 and b1
+
 ci1 <- confint(lm1, level = 0.90)
 ci1
+
+# making confidence intervals for line 
+
 ci3 <- predict(lm1, newdata = data.frame(Brain_Size_Species_Mean = d$Brain_Size_Species_Mean), interval = "confidence",
     level = 0.90)
 head(ci3)
 lines <- data.frame(ci3)
+
+# Making prediction intervals for line
 
 ci5 <- predict(lm1, newdata = data.frame(Brain_Size_Species_Mean = d$Brain_Size_Species_Mean), interval = "prediction",
     level = 0.90)
 head(ci5)
 lines3 <- data.frame(ci5)
 
-text <- "(Longevity)= 1.2180(Mean brain size) + 248.9523"
+# Plotting the lines on a graph
+
+text <- "(Longevity)= 0.8789(Mean brain size) + 307.7522"
 
 ggplot(data = d, aes(x = Brain_Size_Species_Mean, y = MaxLongevity_m)) + geom_point(color="darkorange3") + 
   geom_text(aes(x = 250, y = 750, label=text)) + 
@@ -185,22 +197,35 @@ ggplot(data = d, aes(x = Brain_Size_Species_Mean, y = MaxLongevity_m)) + geom_po
 
 ```
 
+
+
 ```{r}
+
+# Making log() linear model
+
 lm2 <- lm(log(MaxLongevity_m) ~ log(Brain_Size_Species_Mean), data = d)
 summary(lm2)
+
+# Finding confidence intervals for parameters b0 and b1
+
 ci2 <- confint(lm2, level = 0.90)
 ci2
+
+# Making confidence intervals for line
 
 ci4 <- predict(lm1, newdata = data.frame(Brain_Size_Species_Mean = d$Brain_Size_Species_Mean), interval = "confidence",
     level = 0.90)
 head(ci4)
 lines2 <- data.frame(ci4)
 
+# Making prediction intervals for line
+
 ci6 <- predict(lm2, newdata = data.frame(Brain_Size_Species_Mean = d$Brain_Size_Species_Mean), interval = "prediction",
     level = 0.90)
 head(ci6)
 lines4 <- data.frame(ci6)
 
+# Plotting the lines on a graph
 
 text2 <- "log(Longevity)= 0.20285*log(Mean brain size) + 5.08650"
 ggplot(data = d, aes(x = log(Brain_Size_Species_Mean), y = log(MaxLongevity_m))) + geom_point(color="darkorange") + geom_text(aes(x = 4, y = 7, label=text2)) + 
@@ -209,13 +234,15 @@ geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = log(lines2$lwr), color = "
   geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = log(lines2$upr), color = "red")) +
    geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = lines4$lwr, color = "green")) + 
   geom_line(aes(x = log(d$Brain_Size_Species_Mean), y = lines4$upr, color = "blue")) + scale_color_discrete(name = "legend", labels = c("Fit", "Upper Prediction Interval", "Lower Prediction Interval", "Lower Confidence Interval" , "Upper Confidence Interval"))
-# Not sure why the legend does not appear on this graph like it did the last 
 
+# Confidence intervals for 800
 
 ci7 <- predict(lm1, newdata = data.frame(Brain_Size_Species_Mean = 800), interval = "prediction",
     level = 0.90)
 ci8 <- predict(lm2, newdata = data.frame(Brain_Size_Species_Mean = 800), interval = "prediction",
     level = 0.90)
+
+# Yes I trust this estimate. It came from my model and seems accurate. 
 
 # The log model looks like it has a better fit 
 
