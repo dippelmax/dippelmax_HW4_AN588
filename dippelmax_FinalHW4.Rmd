@@ -74,6 +74,7 @@ Z.prop.test <- function(p1, p0, n1, p2=NULL, n2=NULL) {
 ```
 
 
+
 ```{r}
 # Adding more functions
 
@@ -124,7 +125,7 @@ lower <- (p1 - p2) - (z * sqrt((p1*(1-p1)/n1) + (p2 * (1-p2)/n2)))
   
 ```
 
-
+*This is good, basically improving the previous function by testing for the rule of thumb for the distribution. You do, however, want to assign "alternative" to "two.sided" as default, then you can also indicate whether you are looking at the lower tail, upper, or both (alternative = "less", "greater", or "two.sided", respectively). Then, it can also be tested using these parameteres. But otherwise it looks really good!*
 
 
 
