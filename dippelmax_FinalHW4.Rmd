@@ -198,7 +198,7 @@ ggplot(data = d, aes(x = Brain_Size_Species_Mean, y = MaxLongevity_m)) + geom_po
 
 ```
 
-
+*beautiful*
 
 ```{r}
 
@@ -249,3 +249,5 @@ ci8 <- predict(lm2, newdata = data.frame(Brain_Size_Species_Mean = 800), interva
 
 ```
 
+*taking the log of your variables will help you get a straight best fit line*
+*re: Brain_Size_Species_Mean = 800: Just because it came from your model doesn't make it right! (although i love the confidence). Remember, models are wrong, but helpful. Finding the value for when Brain_Size_Species_Mean = 800 may not be helpful in this case because it is so far off from the data that we have put into our model.*
